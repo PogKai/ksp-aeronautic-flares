@@ -2,7 +2,7 @@
 
 ## aeronautic
 
-The flare model (`Source/FlareModel.cs`, `Source/Graybody.cs`) is ported from [aeronautic](https://github.com/Romainlg29/aeronautic) by Romain Le Gall, `@aeronautic/countermeasures` (`flare.ts`, `graybody.ts`, `trail.ts`) at commit `db04669`. Each ported file names its upstream source. That code is used under the MIT License:
+The flare model (`Source/FlareModel.cs`, `Source/Graybody.cs`) and the chaff model (`Source/ChaffModel.cs`) are ported from [aeronautic](https://github.com/Romainlg29/aeronautic) by Romain Le Gall, `@aeronautic/countermeasures` (`flare.ts`, `graybody.ts`, `trail.ts`, `chaff.ts`, `smoke.ts`) at commit `db04669`. Each ported file names its upstream source. That code is used under the MIT License:
 
 ```
 MIT License
@@ -28,7 +28,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-The upstream model rests on Debnath et al., CEJEM 22(2), 2025 (MTV1 burn rate and band energy) and the CIE 1924 photopic luminosity function.
+The upstream model rests on Debnath et al., CEJEM 22(2), 2025 (MTV1 burn rate and band energy), the one-mil chaff measurements it cites (Stine, 1980; US patent 4,653,403) and the CIE 1924 photopic luminosity function.
 
 ## BDArmory
 

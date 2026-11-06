@@ -1,8 +1,7 @@
-using UnityEngine;
-
 namespace AeronauticFlares
 {
-    // Read from an AERONAUTIC_FLARES node in GameData/AeronauticFlares/Settings.cfg
+    // The settings, with their defaults. In KSP they are read from GameData/AeronauticFlares/Settings.cfg and the
+    // in-game window's PluginData/user.cfg (FlareSettingsStore); the offline harness sets them directly.
     static class FlareSettings
     {
         public const string Version = "1.0.0";
@@ -18,6 +17,9 @@ namespace AeronauticFlares
         public static float CorePixels = 44f;
         // Multiplies the colour of everything drawn, over 1 so the flame saturates to white at its heart
         public static float Gain = 4f;
+        // How far the white-hot core streams back from the grain in the airstream, in core lengths per unit of the airstream's share
+        // of the flame it sweeps off (0: a round core). Daylight stretches it further, as there is no glare to round it
+        public static float FlameStreak = 3f;
         // Narrowest the trail is drawn, pixels at 1440p
         public static float TrailPixels = 5f;
         // The flare's light on the aircraft and ground around it: intensity at full brightness, and reach in metres
@@ -35,41 +37,22 @@ namespace AeronauticFlares
         public static float DayCore = 0.8f;
         public static float DayLight = 0.1f;
 
-        public static void Load()
-        {
-            var nodes = GameDatabase.Instance.GetConfigNodes("AERONAUTIC_FLARES");
-            if (nodes.Length == 0) return;
-            var n = nodes[0];
-            Read(n, "enabled", ref Enabled);
-            Read(n, "trail", ref Trail);
-            Read(n, "brightness", ref Brightness);
-            Read(n, "flameScale", ref FlameScale);
-            Read(n, "glarePixels", ref GlarePixels);
-            Read(n, "corePixels", ref CorePixels);
-            Read(n, "gain", ref Gain);
-            Read(n, "trailPixels", ref TrailPixels);
-            Read(n, "lightIntensity", ref LightIntensity);
-            Read(n, "lightRange", ref LightRange);
-            Read(n, "fullSizeDistance", ref FullSizeDistance);
-            Read(n, "farShare", ref FarShare);
-            Read(n, "overlapDim", ref OverlapDim);
-            Read(n, "fadeSeconds", ref FadeSeconds);
-            Read(n, "dayGlare", ref DayGlare);
-            Read(n, "dayCore", ref DayCore);
-            Read(n, "dayLight", ref DayLight);
-        }
-
-        static void Read(ConfigNode node, string key, ref bool value)
-        {
-            if (node.HasValue(key)) bool.TryParse(node.GetValue(key), out value);
-        }
-
-        static void Read(ConfigNode node, string key, ref float value)
-        {
-            float parsed;
-            if (node.HasValue(key) && float.TryParse(node.GetValue(key), System.Globalization.NumberStyles.Float,
-                    System.Globalization.CultureInfo.InvariantCulture, out parsed))
-                value = parsed;
-        }
+        // Chaff: a faint cloud of fibres that glints where they catch the light, not a sprite
+        public static bool Chaff = true;
+        // Multiplies the cloud's haze and its glints
+        public static float ChaffBrightness = 1f;
+        // How long a cloud hangs in the air, and how many glints it has
+        public static float ChaffSeconds = 20f;
+        // Over the last this many seconds of its life a cloud thins away to nothing
+        public static float ChaffFadeSeconds = 7f;
+        public static int ChaffGlints = 240;
+        // How near square to the sun's mirror direction a fibre glints, in radians: wider than the sun is, so a cloud twinkles
+        public static float ChaffGlintWidth = 0.05f;
+        // The air's turbulence, which spreads a cloud, m2/s3
+        public static float Turbulence = 3e-3f;
+        // Draw BDArmory's own sprites instead (set in the in-game window)
+        public static bool LegacyFlares, LegacyChaff;
+        // Raised each time a setting changes in the window, so pooled objects pick it up
+        public static int Revision;
     }
 }

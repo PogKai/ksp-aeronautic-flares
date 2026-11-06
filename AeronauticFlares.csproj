@@ -14,12 +14,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Source\*.cs" />
-    <!-- Dev builds add the night and size probe; Release never ships it. dotnet build -c Dev -->
-    <Compile Include="Source\Dev\*.cs" Condition="'$(Configuration)' == 'Dev'" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp"><HintPath>$(Managed)\Assembly-CSharp.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine"><HintPath>$(Managed)\UnityEngine.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine.CoreModule"><HintPath>$(Managed)\UnityEngine.CoreModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.IMGUIModule"><HintPath>$(Managed)\UnityEngine.IMGUIModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.AnimationModule"><HintPath>$(Managed)\UnityEngine.AnimationModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.UI"><HintPath>$(Managed)\UnityEngine.UI.dll</HintPath><Private>false</Private></Reference>
   </ItemGroup>
 </Project>
