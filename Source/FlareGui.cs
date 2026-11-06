@@ -103,22 +103,34 @@ namespace AeronauticFlares
             return changed;
         }
 
-        // A dark disc with a hot flare glow, drawn here so there is no image file to ship
+        // A dark disc with a flare falling in it: a white-hot head with a glow at the bottom, and a flame curving up behind it.
+        // Drawn here so there is no image file to ship.
         static Texture2D Icon(int size)
         {
             var texture = new Texture2D(size, size, TextureFormat.RGBA32, false);
             var pixels = new Color32[size * size];
+            const float headX = 0.22f, headY = -0.40f;
+            const int steps = 24;
             for (int y = 0; y < size; y++)
             {
                 for (int x = 0; x < size; x++)
                 {
-                    float dx = (x + 0.5f) / size * 2f - 1f, dy = (y + 0.5f) / size * 2f - 1f;
-                    float r = Mathf.Sqrt(dx * dx + dy * dy);
-                    float disc = Mathf.Clamp01((0.95f - r) * 12f);
-                    float glow = Mathf.Exp(-r * r * 9f);
-                    float core = Mathf.Exp(-r * r * 60f);
-                    var color = new Color(0.1f + glow * 1.1f + core, 0.1f + glow * 0.55f + core, 0.12f + glow * 0.15f + core, disc);
-                    pixels[y * size + x] = color;
+                    float u = (x + 0.5f) / size * 2f - 1f, v = (y + 0.5f) / size * 2f - 1f;
+                    float disc = Mathf.Clamp01((0.95f - Mathf.Sqrt(u * u + v * v)) * 12f);
+                    float dx = u - headX, dy = v - headY, d2 = dx * dx + dy * dy;
+                    float glow = Mathf.Exp(-d2 * 11f), core = Mathf.Exp(-d2 * 130f);
+                    // The nearest point on the curved path behind the head, and how far back along it that is
+                    float nearest = 9f, back = 0f;
+                    for (int i = 0; i <= steps; i++)
+                    {
+                        float t = (float)i / steps;
+                        float px = headX - 0.95f * t * t, py = headY + 1.45f * t;
+                        float d = (u - px) * (u - px) + (v - py) * (v - py);
+                        if (d < nearest) { nearest = d; back = t; }
+                    }
+                    float width = 0.045f + 0.06f * back;
+                    float streak = Mathf.Exp(-nearest / (width * width)) * Mathf.Exp(-back * 1.7f) * Mathf.Min(1f, back * 12f);
+                    pixels[y * size + x] = new Color(0.08f + glow * 0.9f + streak + core, 0.08f + glow * 0.45f + streak * 0.5f + core, 0.1f + glow * 0.12f + streak * 0.12f + core, disc);
                 }
             }
             texture.SetPixels32(pixels);
