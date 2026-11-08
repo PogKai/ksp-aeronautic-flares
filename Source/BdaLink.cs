@@ -12,7 +12,7 @@ namespace AeronauticFlares
 
         static bool resolved;
         static Type flareType, dropperType, chaffType;
-        static FieldInfo poolField, chaffPoolField, poolListField, velocityField, lifeTimeField, chaffVelocityField;
+        static FieldInfo poolField, chaffPoolField, poolListField, velocityField, lifeTimeField, startTimeField, chaffVelocityField;
 
         public static Type FlareType { get { Resolve(); return flareType; } }
 
@@ -42,6 +42,7 @@ namespace AeronauticFlares
             poolField = dropperType.GetField("flarePool", Any);
             velocityField = flareType.GetField("velocity", Any);
             lifeTimeField = flareType.GetField("lifeTime", Any);
+            startTimeField = flareType.GetField("startTime", Any);
             if (chaffType != null && dropperType != null)
             {
                 chaffPoolField = dropperType.GetField("chaffPool", Any);
@@ -83,6 +84,12 @@ namespace AeronauticFlares
         public static Vector3 Velocity(Component flare)
         {
             return (Vector3)velocityField.GetValue(flare);
+        }
+
+        // When BDArmory lit the flare (its own clock), or now if it will not say
+        public static float StartTime(Component flare)
+        {
+            return startTimeField == null ? Time.time : (float)startTimeField.GetValue(flare);
         }
 
         // BDArmory's flare lifetime in seconds

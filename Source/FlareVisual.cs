@@ -47,6 +47,8 @@ namespace AeronauticFlares
                 visual.lights[i].shadows = LightShadows.None;
             }
             visual.ApplyMode();
+            // A flare already flying (a pool that grew mid-salvo) was enabled before it had its fields: start it now, at its true age
+            if (pooled.activeInHierarchy) visual.Begin(BdaLink.StartTime(cm));
             return true;
         }
 
@@ -70,7 +72,13 @@ namespace AeronauticFlares
 
         void OnEnable()
         {
-            startTime = Time.time;
+            // AddComponent enables a flying flare before Attach has set its fields; Attach starts it afterwards
+            if (flare != null) Begin(Time.time);
+        }
+
+        void Begin(float start)
+        {
+            startTime = start;
             lifeTime = BdaLink.LifeTime(flare);
             State.Reset();
             if (FlareDirector.Instance != null) FlareDirector.Instance.Add(this);

@@ -18,6 +18,8 @@ namespace AeronauticFlares
             visual.chaff = cm;
             visual.renderers = pooled.GetComponentsInChildren<Renderer>(true);
             visual.ApplyMode();
+            // A cartridge already flying (a pool that grew mid-salvo) was enabled before it had its fields: its cloud starts now
+            if (pooled.activeInHierarchy) visual.Spawn();
             return true;
         }
 
@@ -34,7 +36,9 @@ namespace AeronauticFlares
             }
         }
 
-        void OnEnable()
+        void OnEnable() { Spawn(); }
+
+        void Spawn()
         {
             if (!Replacing || FlareDirector.Instance == null || chaff == null) return;
             ApplyMode();
