@@ -48,7 +48,7 @@ Needs **BDArmory 1.13.1** ([BrettRyland's fork](https://github.com/BrettRyland/B
 * **In-flight window:** click the button on the stock toolbar in flight to switch flares or chaff back to BDArmory's own effects at once (no restart), and to set each one's brightness. Your choices are saved to `PluginData/user.cfg`
 * **Visual only:** where a flare or chaff cloud goes, how long it lives and what a missile sees are BDArmory's. The mod changes none of it
 * **Chaff lasts 20 s:** a cloud thins away over its last 7 s, and one removed early fades over 1.5 s rather than vanishing in a frame
-* **Tested** with KSP 1.12.5 and BDArmory 1.13.1.0. A volley of 41 flares and 43 chaff clouds at once held 60 fps in the test scene
+* **Tested** with KSP 1.12.5 and BDArmory 1.13.1.0. A volley of 60 flares and 60 chaff clouds at once held 60 fps in the test scene
 
 <details>
 <summary><b>Settings.cfg</b>: every tuning value</summary>
@@ -82,6 +82,13 @@ Needs **BDArmory 1.13.1** ([BrettRyland's fork](https://github.com/BrettRyland/B
 | `turbulence` | 0.003 | The air's turbulence (m2/s3), which spreads a cloud |
 
 </details>
+
+<br>
+
+## Known issues
+
+* **Chaff stutter while accelerating:** a chaff cloud can stutter as it falls away while the aircraft is accelerating. Chaff dropped at steady speed is smooth. The cause is under investigation
+* **Tested on one setup:** KSP 1.12.5 with BDArmory 1.13.1.0. Other versions are not tested
 
 <br>
 
