@@ -6,10 +6,11 @@
 
 [![Release](https://img.shields.io/github/v/release/PogKai/ksp-aeronautic-flares?style=flat-square&label=release&color=2b7bb9)](https://github.com/PogKai/ksp-aeronautic-flares/releases/latest)
 [![KSP](https://img.shields.io/badge/KSP-1.12.x-4c9a4c?style=flat-square)](#installation)
-[![BDArmory](https://img.shields.io/badge/BDArmory-1.13.1-c0392b?style=flat-square)](#installation)
+[![BDArmory](https://img.shields.io/badge/BDArmory-1.13.1-c0392b?style=flat-square)](https://github.com/BrettRyland/BDArmory/releases/tag/v1.13.1.0)
 [![License](https://img.shields.io/badge/license-CC%20BY--NC--SA%204.0-lightgrey?style=flat-square)](license.md)
 
 **[Download](https://github.com/PogKai/ksp-aeronautic-flares/releases/latest)**
+&nbsp;·&nbsp; [Requires BDArmory](https://github.com/BrettRyland/BDArmory/releases/tag/v1.13.1.0)
 &nbsp;·&nbsp; [How it works](docs/how-it-works.md)
 &nbsp;·&nbsp; [Changelog](CHANGELOG.md)
 
@@ -39,7 +40,7 @@ A visual add-on for [BDArmory](https://github.com/BrettRyland/BDArmory). It redr
 2. Copy the archive's `GameData/AeronauticFlares` folder into your KSP `GameData/` folder.
 3. Fire.
 
-Needs **BDArmory 1.13.1** ([BrettRyland's fork](https://github.com/BrettRyland/BDArmory/releases)) on **KSP 1.12.x**. Without BDArmory it does nothing. If a later BDArmory changes its flare or chaff classes, the mod logs a warning and leaves the stock effects alone. It needs no shaders or asset bundles: it draws with KSP's own particle shaders and textures it generates itself.
+**Required: [BDArmory 1.13.1.0](https://github.com/BrettRyland/BDArmory/releases/tag/v1.13.1.0)** (BrettRyland's fork), installed first, on **KSP 1.12.x**. Without BDArmory it does nothing. If a later BDArmory changes its flare or chaff classes, the mod logs a warning and leaves the stock effects alone. It needs no shaders or asset bundles: it draws with KSP's own particle shaders and textures it generates itself.
 
 <br>
 
