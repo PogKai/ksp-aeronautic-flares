@@ -21,6 +21,8 @@ namespace AeronauticFlares
                     Read(u, "legacyChaff", ref FlareSettings.LegacyChaff);
                     Read(u, "brightness", ref FlareSettings.Brightness);
                     Read(u, "chaffBrightness", ref FlareSettings.ChaffBrightness);
+                    Read(u, "missileSmoke", ref FlareSettings.MissileSmoke);
+                    Read(u, "smokeDensity", ref FlareSettings.SmokeDensity);
                 }
             }
         }
@@ -35,6 +37,8 @@ namespace AeronauticFlares
             u.AddValue("legacyChaff", FlareSettings.LegacyChaff);
             u.AddValue("brightness", FlareSettings.Brightness.ToString(ci));
             u.AddValue("chaffBrightness", FlareSettings.ChaffBrightness.ToString(ci));
+            u.AddValue("missileSmoke", FlareSettings.MissileSmoke);
+            u.AddValue("smokeDensity", FlareSettings.SmokeDensity.ToString(ci));
             System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(UserPath));
             root.Save(UserPath);
             FlareSettings.Revision++;
@@ -67,6 +71,11 @@ namespace AeronauticFlares
             Read(n, "chaffGlintWidth", ref FlareSettings.ChaffGlintWidth);
             Read(n, "turbulence", ref FlareSettings.Turbulence);
             float glints = FlareSettings.ChaffGlints;
+            Read(n, "missileSmoke", ref FlareSettings.MissileSmoke);
+            Read(n, "smokeDensity", ref FlareSettings.SmokeDensity);
+            Read(n, "smokeWidth", ref FlareSettings.SmokeWidth);
+            Read(n, "smokeGrowth", ref FlareSettings.SmokeGrowth);
+            Read(n, "smokeSeconds", ref FlareSettings.SmokeSeconds);
             Read(n, "chaffGlints", ref glints);
             FlareSettings.ChaffGlints = Mathf.Clamp((int)glints, 0, 600);
         }

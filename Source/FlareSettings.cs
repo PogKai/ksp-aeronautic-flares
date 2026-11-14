@@ -52,6 +52,13 @@ namespace AeronauticFlares
         public static float Turbulence = 3e-3f;
         // Draw BDArmory's own sprites instead (set in the in-game window)
         public static bool LegacyFlares, LegacyChaff;
+        // Missile smoke: a lit smoke trail behind every fired BDArmory missile. Density multiplies its opacity; width (m) and growth (times that
+        // width the trail spreads to) set its size, and it hangs in the air for SmokeSeconds
+        public static bool MissileSmoke = true;
+        public static float SmokeDensity = 1f;
+        public static float SmokeWidth = 1f;
+        public static float SmokeGrowth = 7f;
+        public static float SmokeSeconds = 10f;
         // Raised each time a setting changes in the window, so pooled objects pick it up
         public static int Revision;
     }

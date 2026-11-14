@@ -26,6 +26,7 @@ A visual add-on for [BDArmory](https://github.com/BrettRyland/BDArmory). It redr
 |---|---|
 | **Flares** | A white-hot core that streams back along the airstream, a halo, a light and a trail that cools from white-orange to red. The flame follows an MJU-7 class grain as it burns down, and fades over its last 0.8 s instead of cutting off |
 | **Chaff** | A faint, wispy cloud that blooms open along the path the aircraft flew, then hangs where it formed, sinking and spreading in the turbulence. Fibres glint in the sun by day and in a flare's light at night |
+| **Missile smoke** | Every fired missile leaves a thick white smoke trail: cloud-textured puffs that spread and thin as they age and hang in the air where they formed. Each puff is lit by the sky, the sun's colour and height, terrain in the sun's way and any flare burning nearby, so it is warm at sunset, grey in shade and glows near a salvo. The trail starts at the nozzle once the motor ignites. The missile's own plume smoke is hidden while this is on, so it is not doubled. Switch it on or off in the in-flight window |
 | **Light and distance** | A flare lights the nearest parts of the aircraft at night, stays a bright point from far away, and overlapping flares dim each other so a salvo never blows out. In daylight the glare and light drop to a fraction |
 
 | Day | Dusk |
@@ -46,8 +47,8 @@ A visual add-on for [BDArmory](https://github.com/BrettRyland/BDArmory). It redr
 
 ## Usage notes
 
-* **In-flight window:** click the button on the stock toolbar in flight to switch flares or chaff back to BDArmory's own effects at once (no restart), and to set each one's brightness. Your choices are saved to `PluginData/user.cfg`
-* **Visual only:** where a flare or chaff cloud goes, how long it lives and what a missile sees are BDArmory's. The mod changes none of it
+* **In-flight window:** click the button on the stock toolbar in flight to switch flares or chaff back to BDArmory's own effects, turn the missile smoke trails on or off, and set the flare, chaff and smoke brightness, all at once (no restart). Your choices are saved to `PluginData/user.cfg`
+* **Visual only:** where a flare or chaff cloud goes, how long it lives and what a missile sees are BDArmory's. The mod changes none of it, and the missile smoke is drawn only: the missile's flight and guidance are untouched
 * **Chaff lasts 20 s:** a cloud thins away over its last 7 s, and one removed early fades over 1.5 s rather than vanishing in a frame
 * **Tested** with KSP 1.12.5 and BDArmory 1.13.1.0. A volley of 60 flares and 60 chaff clouds at once held 60 fps in the test scene
 
@@ -81,6 +82,10 @@ A visual add-on for [BDArmory](https://github.com/BrettRyland/BDArmory). It redr
 | `chaffGlints` | 240 | How many glints a cloud has |
 | `chaffGlintWidth` | 0.05 | How near square to the light's mirror direction a fibre glints (radians) |
 | `turbulence` | 0.003 | The air's turbulence (m2/s3), which spreads a cloud |
+| `missileSmoke` | true | The smoke trail behind fired missiles (also the in-flight window's toggle) |
+| `smokeDensity` | 1 | Multiplies the smoke's opacity |
+| `smokeWidth` / `smokeGrowth` | 1 / 7 | The trail's width at the motor (m) and how many times that it spreads to |
+| `smokeSeconds` | 10 | How long a puff hangs in the air |
 
 </details>
 

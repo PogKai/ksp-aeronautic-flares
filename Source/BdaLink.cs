@@ -11,7 +11,10 @@ namespace AeronauticFlares
         const BindingFlags Any = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
 
         static bool resolved;
-        static Type flareType, dropperType, chaffType;
+        static Type flareType, dropperType, chaffType, missileType;
+        static FieldInfo firedField;
+        static PropertyInfo firedProperty, stateProperty;
+        static FieldInfo stateField;
         static FieldInfo poolField, chaffPoolField, poolListField, velocityField, lifeTimeField, startTimeField, chaffVelocityField;
 
         public static Type FlareType { get { Resolve(); return flareType; } }
@@ -19,6 +22,8 @@ namespace AeronauticFlares
         public static Type ChaffType { get { Resolve(); return chaffType; } }
 
         public static bool ChaffAvailable { get { Resolve(); return chaffType != null && chaffPoolField != null && chaffVelocityField != null; } }
+
+        public static bool MissileAvailable { get { Resolve(); return missileType != null && (firedField != null || firedProperty != null); } }
 
         public static bool Available { get { Resolve(); return flareType != null && poolField != null; } }
 
@@ -32,6 +37,7 @@ namespace AeronauticFlares
                 flareType = loaded.assembly.GetType("BDArmory.CounterMeasure.CMFlare");
                 dropperType = loaded.assembly.GetType("BDArmory.CounterMeasure.CMDropper");
                 chaffType = loaded.assembly.GetType("BDArmory.CounterMeasure.CMChaff");
+                FindMissile(loaded.assembly);
                 break;
             }
             if (flareType == null || dropperType == null)
@@ -53,6 +59,54 @@ namespace AeronauticFlares
                 Debug.LogWarning("[AeronauticFlares] BDArmory's flare classes differ from 1.13.1, idle");
                 poolField = null;
             }
+        }
+
+        static void FindMissile(Assembly assembly)
+        {
+            try
+            {
+                foreach (var type in assembly.GetTypes())
+                {
+                    if (type.Name != "MissileBase") continue;
+                    missileType = type;
+                    firedField = type.GetField("HasFired", Any);
+                    firedProperty = type.GetProperty("HasFired", Any);
+                    stateField = type.GetField("MissileState", Any);
+                    stateProperty = type.GetProperty("MissileState", Any);
+                    return;
+                }
+            }
+            catch (ReflectionTypeLoadException) { }
+        }
+
+        // True for a one-part vessel that is a BDArmory missile in flight
+        public static bool IsFiredMissile(Vessel vessel)
+        {
+            if (!MissileAvailable || vessel == null || !vessel.loaded || vessel.parts.Count != 1) return false;
+            foreach (PartModule module in vessel.parts[0].Modules)
+            {
+                if (!missileType.IsInstanceOfType(module)) continue;
+                object fired = firedField != null ? firedField.GetValue(module) : firedProperty.GetValue(module, null);
+                return fired is bool && (bool)fired;
+            }
+            return false;
+        }
+
+        // BDArmory's state name for a fired missile ("Drop", "Boost", "Cruise", "PostThrust"...), or null when it cannot be read
+        public static string MotorState(Vessel vessel)
+        {
+            if (missileType == null || vessel == null || vessel.parts.Count != 1) return null;
+            foreach (PartModule module in vessel.parts[0].Modules)
+            {
+                if (!missileType.IsInstanceOfType(module)) continue;
+                try
+                {
+                    object state = stateField != null ? stateField.GetValue(module) : stateProperty != null ? stateProperty.GetValue(module, null) : null;
+                    return state != null ? state.ToString() : null;
+                }
+                catch (Exception) { return null; }
+            }
+            return null;
         }
 
         // The pooled flare objects, or null before BDArmory has built its pool

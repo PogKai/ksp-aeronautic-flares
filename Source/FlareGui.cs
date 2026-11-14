@@ -4,7 +4,7 @@ using UnityEngine;
 namespace AeronauticFlares
 {
     // A window from a button on the stock toolbar in flight, to switch back to BDArmory's own flare and chaff
-    // effects or tune the brightness. Changes apply at once and are kept in PluginData/user.cfg.
+    // effects, turn the missile smoke trails on or off, or tune the brightness. Changes apply at once and are kept in PluginData/user.cfg.
     [KSPAddon(KSPAddon.Startup.Flight, false)]
     public sealed class FlareGui : MonoBehaviour
     {
@@ -56,23 +56,26 @@ namespace AeronauticFlares
         void Draw(int id)
         {
             bool changed = false;
-            GUILayout.Label("Flares and chaff are drawn by this add-on instead of BDArmory's own sprites. " +
-                            "Switch either back here; it applies at once.");
+            GUILayout.Label("Flares and chaff are drawn by this add-on instead of BDArmory's own sprites, and fired missiles leave a smoke trail. " +
+                            "Switch any of them here; it applies at once.");
             if (!BdaLink.Available) GUILayout.Label("BDArmory was not found: nothing to replace.");
 
             GUILayout.Space(4);
             changed |= Toggle(ref FlareSettings.LegacyFlares, "Flares: BDArmory's legacy effect");
             changed |= Toggle(ref FlareSettings.LegacyChaff, "Chaff: BDArmory's legacy effect");
+            changed |= Toggle(ref FlareSettings.MissileSmoke, "Missile smoke trails");
 
             GUILayout.Space(4);
             changed |= Slider("Flare brightness", ref FlareSettings.Brightness);
             changed |= Slider("Chaff brightness", ref FlareSettings.ChaffBrightness);
+            changed |= Slider("Smoke density", ref FlareSettings.SmokeDensity);
 
             GUILayout.Space(4);
             if (GUILayout.Button("Reset to defaults"))
             {
                 FlareSettings.LegacyFlares = FlareSettings.LegacyChaff = false;
-                FlareSettings.Brightness = FlareSettings.ChaffBrightness = 1f;
+                FlareSettings.Brightness = FlareSettings.ChaffBrightness = FlareSettings.SmokeDensity = 1f;
+                FlareSettings.MissileSmoke = true;
                 changed = true;
             }
             if (changed)

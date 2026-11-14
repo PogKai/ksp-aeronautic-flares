@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Missile smoke: every fired BDArmory missile leaves a thick white smoke trail. Cloud-textured puffs spread fast at first, then slowly, thin out with age and hang in the air (anchored to the planet, so KSP's scene shifts do not drag them along). Each puff is lit by the sky, the sun's colour and height, terrain in the sun's way and nearby burning flares. The trail starts at the nozzle and only once the motor ignites (a delayed ignition waits), and is full during boost, fading out over 4 s once the booster is spent (BDArmory's Boost to Cruise change), with no smoke after. The missile's own plume smoke is hidden while this trail is on (its flame stays). Drawn only; the missile's flight and guidance are BDArmory's.
+- Missile smoke is cheap to run: colour refreshed every third frame, sun terms once per trail, shadow rays capped at 40 a frame, at most 12 trails at once.
+- In-flight window: a "Missile smoke trails" toggle and a "Smoke density" slider, saved to `PluginData/user.cfg` with the other choices.
+- Settings `missileSmoke`, `smokeDensity`, `smokeWidth`, `smokeGrowth` and `smokeSeconds` in `Settings.cfg`.
+
 ## 1.0.0
 
 First release. Redraws BDArmory's flares and chaff with physically based models ported from aeronautic's countermeasures module. Built against BDArmory 1.13.1.0 for KSP 1.12.5.

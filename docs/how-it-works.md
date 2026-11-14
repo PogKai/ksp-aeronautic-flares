@@ -2,7 +2,7 @@
 
 ## Layout
 
-The drawing is KSP-free. `FlareEnvironment` holds the world inputs (sun, daylight, up, air, screen height) as delegates, `KspEnvironment` fills them from KSP, `FlareState` and `ChaffCloud` are the per-effect state, `FlareRenderer` and `ChaffRenderer` draw. `FlareVisual`, `ChaffVisual`, `FlareDirector`, `FlareGui` and `BdaLink` are the KSP glue. `FlareSettings` is plain fields; `FlareSettingsStore` reads KSP's config files.
+The drawing is KSP-free. `FlareEnvironment` holds the world inputs (sun, daylight, up, air, screen height) as delegates, `KspEnvironment` fills them from KSP, `FlareState` and `ChaffCloud` are the per-effect state, `FlareRenderer` and `ChaffRenderer` draw. `FlareVisual`, `ChaffVisual`, `FlareDirector`, `FlareGui` and `BdaLink` are the KSP glue; `MissileSmoke` is a separate add-on class for the missile trails. `FlareSettings` is plain fields; `FlareSettingsStore` reads KSP's config files.
 
 ## Hook
 
@@ -39,6 +39,16 @@ One mesh for all flares, rebuilt each frame, with KSP's additive particle shader
 - **Fade:** the cloud's depth falls as it spreads, and over the last `chaffFadeSeconds` (7 of 20) its haze and glints are scaled down to nothing together, as a flare's are. A cloud removed early (over the 40-cloud cap, or by the window's switch) is retired: it fades over 1.5 s, then goes.
 - Two meshes carry it all, rebuilt each frame: an alpha-blended one for the haze and streaks, an additive one for the glints.
 
+## Missile smoke
+
+`MissileSmoke` finds fired missiles through `BdaLink.IsFiredMissile` (a one-part vessel whose BDArmory `MissileBase` module has `HasFired`) and gives each a world-space `ParticleSystem`. Each frame it emits puffs along the path flown since the last frame, but only while the motor burns (`BdaLink.MotorState`: BDArmory's `MissileState`). Boost gives full smoke; when the state changes to Cruise the density and width fade to nothing over 4 s whatever the cruise length (a cfg's long cruise phase is game balance, not a real motor); Idle, Drop and PostThrust give none, so a delayed ignition starts the smoke at ignition. If the state cannot be read the trail runs throughout, thinner after 3.5 s. Puffs start at the rearmost of the missile's exhaust emitters (the nozzle), not its centre. They are widest and densest at full strength; size grows on a curve that spreads fast then slows, opacity fades with age, and the system's noise and spin billow it. The puff texture is generated (fractal noise under a round falloff), so there is no image to ship.
+
+While the trail runs, the missile's own plume smoke is hidden: `HideStockSmoke` switches off the renderers of its `KSPParticleEmitter`s whose material texture or name says smoke (the exhaust prefab's `tex_smokeExhaust`), every 0.25 s, and leaves the flame emitters. Renderers rather than emitters, since BDArmory re-enables emitters in its own lists. Turning the smoke off in the window restores them.
+
+KSP shifts the whole scene every physics tick (floating origin, Krakensbane) and the planet turns, so each frame the puffs are moved by the planet frame's change (`bodyTransform`), which keeps the smoke hanging in the air. Each frame every puff's colour is also recomputed: a sky ambient term, the sun's colour and height from `FlareEnvironment`, a ray toward the sun (cached 20 frames per puff) for terrain shadow, and a warm glow from lit flares in `FlareDirector.Active`. Settings are read from `FlareSettings`; turning it off stops new trails and lets the live ones fade.
+
+Cost: the planet-frame move is applied to every puff each frame, but a puff's colour is refreshed only every third frame (new puffs at once), the sun terms are worked out once per trail, shadow rays are cached 30 frames per puff and capped at 40 a frame across all trails, flare glows are skipped beyond their range, and at most 12 trails run at once (a missile past that gets none).
+
 ## The window
 
-`FlareGui` adds a stock toolbar button in flight and an IMGUI window. A change raises `FlareSettings.Revision`; the director's 0.2 s scan then re-applies the mode to every pooled object: for flares it switches the two flame emitters and the lights back to BDArmory's own, for chaff it re-enables the sprite's renderers and clears the clouds. The choices are written to `PluginData/user.cfg` a moment after the last change.
+`FlareGui` adds a stock toolbar button in flight and an IMGUI window. A change raises `FlareSettings.Revision`; the director's 0.2 s scan then re-applies the mode to every pooled object: for flares it switches the two flame emitters and the lights back to BDArmory's own, for chaff it re-enables the sprite's renderers and clears the clouds. The choices (including the missile smoke toggle and density) are written to `PluginData/user.cfg` a moment after the last change.
