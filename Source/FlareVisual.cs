@@ -8,6 +8,9 @@ namespace AeronauticFlares
     {
         public readonly FlareState State = new FlareState();
 
+        // Each lit flare's share of the light budget: a salvo's lights add up, so with n lit flares each takes 1/sqrt(n)
+        public static float LightShare = 1f;
+
         Component flare;
         float startTime, lifeTime;
         Light[] lights;
@@ -108,7 +111,7 @@ namespace AeronauticFlares
             {
                 if (lights[i] == null) continue;
                 lights[i].color = FlareState.FlameColor;
-                lights[i].intensity = FlareSettings.LightIntensity * State.LightLevel;
+                lights[i].intensity = FlareSettings.LightIntensity * State.LightLevel * LightShare / lights.Length;
                 lights[i].range = FlareSettings.LightRange;
             }
         }

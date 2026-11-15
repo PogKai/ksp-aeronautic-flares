@@ -22,9 +22,11 @@ namespace AeronauticFlares
         public static float FlameStreak = 3f;
         // Narrowest the trail is drawn, pixels at 1440p
         public static float TrailPixels = 5f;
+        // The field of view (degrees) at which the pixel sizes above are meant; zoomed in past it they shrink in proportion. 0 leaves them fixed.
+        public static float ZoomReferenceFov = 0f;
         // The flare's light on the aircraft and ground around it: intensity at full brightness, and reach in metres
-        public static float LightIntensity = 6f;
-        public static float LightRange = 80f;
+        public static float LightIntensity = 1.5f;
+        public static float LightRange = 25f;
         // What the halo, the flame's size and the light shrink to in full daylight, as a share of their night values
         // Out to this distance a flare keeps its full pixel size; past it the glare shrinks as 1/sqrt(distance), down to FarShare
         public static float FullSizeDistance = 25f;
@@ -50,8 +52,6 @@ namespace AeronauticFlares
         public static float ChaffGlintWidth = 0.05f;
         // The air's turbulence, which spreads a cloud, m2/s3
         public static float Turbulence = 3e-3f;
-        // Draw BDArmory's own sprites instead (set in the in-game window)
-        public static bool LegacyFlares, LegacyChaff;
         // Missile smoke: a lit smoke trail behind every fired BDArmory missile. Density multiplies its opacity; width (m) and growth (times that
         // width the trail spreads to) set its size, and it hangs in the air for SmokeSeconds
         public static bool MissileSmoke = true;
@@ -59,6 +59,8 @@ namespace AeronauticFlares
         public static float SmokeWidth = 1f;
         public static float SmokeGrowth = 7f;
         public static float SmokeSeconds = 10f;
+        // Draw BDArmory's own sprites instead (set in the in-game window)
+        public static bool LegacyFlares, LegacyChaff;
         // Raised each time a setting changes in the window, so pooled objects pick it up
         public static int Revision;
     }

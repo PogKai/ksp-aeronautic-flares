@@ -132,11 +132,14 @@ namespace AeronauticFlares
             states.Clear();
             if (camera != null)
             {
+                int lit = 0;
                 foreach (var visual in active)
                 {
                     visual.Step(camera);
                     states.Add(visual.State);
+                    if (visual.State.Lit) lit++;
                 }
+                FlareVisual.LightShare = 1f / Mathf.Sqrt(Mathf.Max(lit, 1));
             }
             flareRenderer.Draw(states, camera);
 

@@ -147,7 +147,7 @@ namespace AeronauticFlares
         {
             if (flare.CoreStretch <= 1.05f) return;
             Vector3 view = (flare.Position - eye).normalized;
-            Vector3 tail = Vector3.ProjectOnPlane(-flare.Velocity, view);
+            Vector3 tail = Vector3.ProjectOnPlane(flare.TailDirection, view);
             if (tail.sqrMagnitude < 1e-6f) return;
             tail.Normalize();
             float length = flare.CoreRadius * 2.2f * (flare.CoreStretch - 1f) * flare.Flicker;
@@ -161,7 +161,7 @@ namespace AeronauticFlares
         {
             Color color = Tint(hot, flare.CoreAlpha);
             Vector3 view = (flare.Position - eye).normalized;
-            Vector3 tail = Vector3.ProjectOnPlane(-flare.Velocity, view);
+            Vector3 tail = Vector3.ProjectOnPlane(flare.TailDirection, view);
             if (flare.CoreStretch <= 1.05f || tail.sqrMagnitude < 1e-6f)
             {
                 AddQuad(flare.Position, flare.CoreRadius, color, camera);

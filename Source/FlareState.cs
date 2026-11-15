@@ -20,6 +20,9 @@ namespace AeronauticFlares
 
         public bool Lit;
         public Vector3 Position, Velocity;
+        // The direction the flame is swept back along, turned toward the airflow at a limited rate
+        public Vector3 TailDirection;
+        const float TailTurnSeconds = 0.35f, TailMinSpeed = 15f;
         // How many times longer than wide the core is, and a flicker on its length
         public float CoreStretch = 1f, Flicker = 1f;
         public readonly float Seed = NextSeed();
@@ -56,6 +59,7 @@ namespace AeronauticFlares
         {
             TrailCount = 0;
             Lit = false;
+            TailDirection = Vector3.zero;
         }
 
         // A floating origin shift moves the flare and its trail together
@@ -69,6 +73,7 @@ namespace AeronauticFlares
         {
             Position = position;
             Velocity = velocity;
+            UpdateTail(velocity, deltaTime);
             float burn = age / life;
 
             // The grain burns out over BDArmory's lifetime, so the visuals end when the heat does
@@ -94,12 +99,14 @@ namespace AeronauticFlares
             float distance = Mathf.Max((camera.transform.position - position).magnitude, 1f);
             float metresPerPixel = distance / (screenHeight * 0.5f / Mathf.Tan(camera.fieldOfView * 0.5f * Mathf.Deg2Rad));
             float pixelScale = screenHeight / 1440f;
+            // Zoomed in, the far-field floors on the flame and halo shrink with the field of view, so they do not swell against the magnified scene
+            float zoom = FlareSettings.ZoomReferenceFov > 0f ? Mathf.Clamp(camera.fieldOfView / FlareSettings.ZoomReferenceFov, 0.08f, 1f) : 1f;
             float sqrtLevel = Mathf.Sqrt(level) * Mathf.Lerp(0.6f, 1f, fade);
             // The light reaching the eye falls with the square of the distance, so the glare shrinks as 1 / sqrt(distance)
             // from FullSizeDistance out, to FarShare
             Reach = Mathf.Clamp(Mathf.Sqrt(FlareSettings.FullSizeDistance / distance), FlareSettings.FarShare, 1f);
-            float corePixels = FlareSettings.CorePixels * Mathf.Lerp(1f, FlareSettings.DayCore, day) * pixelScale * sqrtLevel * Reach;
-            HaloPixels = FlareSettings.GlarePixels * Mathf.Lerp(1f, FlareSettings.DayGlare, day) * pixelScale * sqrtLevel * Reach;
+            float corePixels = FlareSettings.CorePixels * Mathf.Lerp(1f, FlareSettings.DayCore, day) * pixelScale * sqrtLevel * Reach * zoom;
+            HaloPixels = FlareSettings.GlarePixels * Mathf.Lerp(1f, FlareSettings.DayGlare, day) * pixelScale * sqrtLevel * Reach * zoom;
             CoreRadius = Mathf.Max((float)light.RadiusM * FlareSettings.FlameScale, corePixels * metresPerPixel);
             HaloRadius = Mathf.Max(CoreRadius * 2.5f, HaloPixels * metresPerPixel);
             MetresPerPixel = metresPerPixel;
@@ -116,6 +123,15 @@ namespace AeronauticFlares
             Flicker = 1f + 0.18f * Mathf.Sin(age * 41f + Seed * 7f) + 0.1f * Mathf.Sin(age * 97f + Seed * 13f) + 0.06f * Mathf.Sin(age * 173f + Seed * 3f);
 
             UpdateTrail(deltaTime);
+        }
+
+        // A flare thrown from a jet slows within a second and its velocity swings round; the flame follows it smoothly and holds when it is nearly still
+        void UpdateTail(Vector3 velocity, float deltaTime)
+        {
+            if (velocity.sqrMagnitude < TailMinSpeed * TailMinSpeed) return;
+            Vector3 target = -velocity.normalized;
+            TailDirection = TailDirection.sqrMagnitude < 0.5f ? target :
+                Vector3.Slerp(TailDirection, target, 1f - Mathf.Exp(-deltaTime / TailTurnSeconds)).normalized;
         }
 
         void UpdateTrail(float deltaTime)

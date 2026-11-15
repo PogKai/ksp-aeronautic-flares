@@ -55,6 +55,7 @@ namespace AeronauticFlares
             Read(n, "gain", ref FlareSettings.Gain);
             Read(n, "flameStreak", ref FlareSettings.FlameStreak);
             Read(n, "trailPixels", ref FlareSettings.TrailPixels);
+            Read(n, "zoomReferenceFov", ref FlareSettings.ZoomReferenceFov);
             Read(n, "lightIntensity", ref FlareSettings.LightIntensity);
             Read(n, "lightRange", ref FlareSettings.LightRange);
             Read(n, "fullSizeDistance", ref FlareSettings.FullSizeDistance);
@@ -70,12 +71,12 @@ namespace AeronauticFlares
             Read(n, "chaffFadeSeconds", ref FlareSettings.ChaffFadeSeconds);
             Read(n, "chaffGlintWidth", ref FlareSettings.ChaffGlintWidth);
             Read(n, "turbulence", ref FlareSettings.Turbulence);
-            float glints = FlareSettings.ChaffGlints;
             Read(n, "missileSmoke", ref FlareSettings.MissileSmoke);
             Read(n, "smokeDensity", ref FlareSettings.SmokeDensity);
             Read(n, "smokeWidth", ref FlareSettings.SmokeWidth);
             Read(n, "smokeGrowth", ref FlareSettings.SmokeGrowth);
             Read(n, "smokeSeconds", ref FlareSettings.SmokeSeconds);
+            float glints = FlareSettings.ChaffGlints;
             Read(n, "chaffGlints", ref glints);
             FlareSettings.ChaffGlints = Mathf.Clamp((int)glints, 0, 600);
         }
