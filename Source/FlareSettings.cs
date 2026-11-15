@@ -4,7 +4,7 @@ namespace AeronauticFlares
     // in-game window's PluginData/user.cfg (FlareSettingsStore); the offline harness sets them directly.
     static class FlareSettings
     {
-        public const string Version = "1.0.0";
+        public const string Version = "1.1.0";
 
         public static bool Enabled = true;
         public static bool Trail = true;

@@ -37,7 +37,7 @@ A visual add-on for [BDArmory](https://github.com/BrettRyland/BDArmory). It redr
 
 ## Installation
 
-1. Download `AeronauticFlares_1.0.0.zip` from the [latest release](https://github.com/PogKai/ksp-aeronautic-flares/releases/latest).
+1. Download `AeronauticFlares_1.1.0.zip` from the [latest release](https://github.com/PogKai/ksp-aeronautic-flares/releases/latest).
 2. Copy the archive's `GameData/AeronauticFlares` folder into your KSP `GameData/` folder.
 3. Fire.
 
@@ -69,7 +69,8 @@ A visual add-on for [BDArmory](https://github.com/BrettRyland/BDArmory). It redr
 | `gain` | 4 | Colour multiplier, so the flame's heart saturates to white |
 | `flameStreak` | 3 | How far the white-hot core streams back in the airstream (0: round); more by day |
 | `trailPixels` | 5 | Narrowest the trail is drawn |
-| `lightIntensity` / `lightRange` | 6 / 80 | The flare's light on the aircraft and ground (range in m) |
+| `zoomReferenceFov` | 0 | The field of view (degrees) the pixel sizes are meant for; zoomed in past it, flames and halos shrink in proportion, down to 8%. 0 leaves them fixed; try your normal field of view, such as 60 |
+| `lightIntensity` / `lightRange` | 1.5 / 25 | The flare's light on the aircraft and ground (range in m) |
 | `fullSizeDistance` | 25 | Out to here (m) a flare keeps its full size |
 | `farShare` | 0.5 | The least a far flare's glare shrinks to |
 | `overlapDim` | 0.5 | How much overlapping halos dim each other |
