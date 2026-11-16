@@ -37,7 +37,7 @@ A visual add-on for [BDArmory](https://github.com/BrettRyland/BDArmory). It redr
 
 ## Installation
 
-1. Download `AeronauticFlares_1.1.0.zip` from the [latest release](https://github.com/PogKai/ksp-aeronautic-flares/releases/latest).
+1. Download `AeronauticFlares_1.1.1.zip` from the [latest release](https://github.com/PogKai/ksp-aeronautic-flares/releases/latest).
 2. Copy the archive's `GameData/AeronauticFlares` folder into your KSP `GameData/` folder.
 3. Fire.
 

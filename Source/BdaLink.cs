@@ -15,6 +15,7 @@ namespace AeronauticFlares
         static FieldInfo firedField;
         static PropertyInfo firedProperty, stateProperty;
         static FieldInfo stateField;
+        static MethodInfo getMissileType;
         static FieldInfo poolField, chaffPoolField, poolListField, velocityField, lifeTimeField, startTimeField, chaffVelocityField;
 
         public static Type FlareType { get { Resolve(); return flareType; } }
@@ -23,7 +24,7 @@ namespace AeronauticFlares
 
         public static bool ChaffAvailable { get { Resolve(); return chaffType != null && chaffPoolField != null && chaffVelocityField != null; } }
 
-        public static bool MissileAvailable { get { Resolve(); return missileType != null && (firedField != null || firedProperty != null); } }
+        public static bool MissileAvailable { get { Resolve(); return missileType != null && getMissileType != null && (firedField != null || firedProperty != null); } }
 
         public static bool Available { get { Resolve(); return flareType != null && poolField != null; } }
 
@@ -73,6 +74,7 @@ namespace AeronauticFlares
                     firedProperty = type.GetProperty("HasFired", Any);
                     stateField = type.GetField("MissileState", Any);
                     stateProperty = type.GetProperty("MissileState", Any);
+                    getMissileType = type.GetMethod("GetMissileType", Any, null, Type.EmptyTypes, null);
                     return;
                 }
             }
@@ -87,7 +89,11 @@ namespace AeronauticFlares
             {
                 if (!missileType.IsInstanceOfType(module)) continue;
                 object fired = firedField != null ? firedField.GetValue(module) : firedProperty.GetValue(module, null);
-                return fired is bool && (bool)fired;
+                if (!(fired is bool) || !(bool)fired) continue;
+
+                // BDArmory also uses MissileBase for bombs, torpedoes and depth charges.
+                string kind = getMissileType.Invoke(module, null)?.ToString();
+                if (kind == "Missile" || kind == "ASWMissile") return true;
             }
             return false;
         }

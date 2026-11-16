@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1
+
+- Restrict Aeronautic Flares smoke trails to fired BDArmory missiles. Bombs, torpedoes and depth charges retain their own effects.
+
 ## 1.1.0 — Missile smoke and softer flare light
 
 ### Added
